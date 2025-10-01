@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "12107650-f6273c59-7fe1-488f-ac08-85f1bde1d159",
+		"name": "CityInfo.API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Cities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "80f7e276-ae4f-40e1-9b50-e06656a76643",
+						"exec": [
+							"// Check that the response status code is 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Check that the response time is less than 200ms\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Check that the response is an array\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Check each city object in the response array\r",
+							"response.forEach(city => {\r",
+							"    pm.test(`City ${city.name} has required properties`, function () {\r",
+							"        pm.expect(city).to.have.all.keys('id', 'name', 'description', 'attractionsCount', 'attractions');\r",
+							"    });\r",
+							"\r",
+							"    // Check that attractionsCount matches the length of attractions array\r",
+							"    pm.test(`Attractions count for ${city.name} is correct`, function () {\r",
+							"        pm.expect(city.attractionsCount).to.equal(city.attractions.length);\r",
+							"    });\r",
+							"\r",
+							"    // Check that attractions is an array\r",
+							"    pm.test(`Attractions for ${city.name} is an array`, function () {\r",
+							"        pm.expect(city.attractions).to.be.an('array');\r",
+							"    });\r",
+							"\r",
+							"    // Check each attraction object in the attractions array\r",
+							"    city.attractions.forEach(attraction => {\r",
+							"        pm.test(`Attraction ${attraction.name} has required properties`, function () {\r",
+							"            pm.expect(attraction).to.have.all.keys('id', 'name', 'description');\r",
+							"        });\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "12107650-9be64b56-25ff-46f8-8311-689a061a6b66",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/cities",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"cities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a city",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "455cc45c-d099-414e-a282-0550b6769063",
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a73a957a-48ed-4afe-8878-80b3dabba766",
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Test for successful status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Test for response time\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"// Test for content type\r",
+							"pm.test(\"Content-Type is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"// Test for response structure\r",
+							"pm.test(\"Response has expected properties\", function () {\r",
+							"    pm.expect(response).to.have.all.keys('id', 'name', 'description', 'attractionsCount', 'attractions');\r",
+							"});\r",
+							"\r",
+							"// Test for attractions being an array\r",
+							"pm.test(\"Attractions is an array\", function () {\r",
+							"    pm.expect(response.attractions).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Test for attractions count\r",
+							"pm.test(\"Attractions count matches\", function () {\r",
+							"    pm.expect(response.attractions.length).to.equal(response.attractionsCount);\r",
+							"});\r",
+							"\r",
+							"// Test for each attraction having required properties\r",
+							"response.attractions.forEach(attraction => {\r",
+							"    pm.test(`Attraction has expected properties`, function () {\r",
+							"        pm.expect(attraction).to.have.all.keys('id', 'name', 'description');\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "12107650-ebfff927-0fdc-404d-b9e9-8b5c186c1957",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/cities/3",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"cities",
+						"3"
+					]
+				},
+				"description": "### Retrieve City Details\n\nThis endpoint retrieves the details of a specific city identified by its unique ID.\n\n#### Request\n\n- **Method**: GET\n    \n- **URL**: `{{baseURL}}/api/cities/{id}`\n    \n- **Path Parameter**:\n    \n    - `id` (integer): The unique identifier of the city you wish to retrieve. In this example, the ID is `1`.\n        \n\n#### Response\n\n- **Status Code**: 200 OK\n    \n- **Content-Type**: application/json\n    \n- **Response Body**:\n    \n    - `id` (integer): The unique identifier of the city.\n        \n    - `name` (string): The name of the city.\n        \n    - `description` (string): A brief description of the city.\n        \n\n#### Notes\n\n- Ensure that the ID provided in the request corresponds to an existing city in the database.\n    \n- The response will return the city details in JSON format, with fields for the city's ID, name, and description."
+			},
+			"response": []
+		},
+		{
+			"name": "Get attractions by city",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b295250f-b511-4b39-87c6-19e0a2f136b8",
+						"exec": [
+							"// Check status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Check response time\r",
+							"pm.test(\"Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"\r",
+							"// Parse response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Validate response structure\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Validate each attraction in the response\r",
+							"response.forEach(attraction => {\r",
+							"    pm.test(`Attraction with id ${attraction.id} has valid structure`, function () {\r",
+							"        pm.expect(attraction).to.have.all.keys('id', 'name', 'description');\r",
+							"        pm.expect(attraction.id).to.be.a('number');\r",
+							"        pm.expect(attraction.name).to.be.a('string');\r",
+							"        pm.expect(attraction.description).to.be.a('string');\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "12107650-38fd5939-c1ce-4af0-9d3e-1f5fb3fbb432",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/cities/1/attractions/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"cities",
+						"1",
+						"attractions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get an attraction by city",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2fced08a-b890-44d7-89e1-88370e330cfc",
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Test for status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Test for response body structure\r",
+							"pm.test(\"Response body has required properties\", function () {\r",
+							"    pm.expect(response).to.have.property('id');\r",
+							"    pm.expect(response).to.have.property('name');\r",
+							"    pm.expect(response).to.have.property('description');\r",
+							"});\r",
+							"\r",
+							"// Test for property types\r",
+							"pm.test(\"Property types are correct\", function () {\r",
+							"    pm.expect(response.id).to.be.a('number');\r",
+							"    pm.expect(response.name).to.be.a('string');\r",
+							"    pm.expect(response.description).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"// Test for content-type header\r",
+							"pm.test(\"Content-Type is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.equal(\"application/json; charset=utf-8\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "12107650-1bf93d3a-f14b-40be-a328-95c7997ab827",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/cities/1/attractions/4",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"cities",
+						"1",
+						"attractions",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
